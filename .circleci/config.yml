@@ -16,10 +16,10 @@ jobs:
           command: "docker build . -t node-sample"
       - run:
           name: "run docker"
-          command: "docker run -d -p8080:8080 node-sample"
+          command: "docker run -d -p8080:8080 --name node-sample node-sample"
       - run:
           name: "test 8080 port"
-          command: "curl localhost:8080"
+          command: "docker run --network container:node-sample appropriate/curl --retry 10 --retry-connrefused http://localhost:8080"
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
