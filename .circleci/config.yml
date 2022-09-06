@@ -5,7 +5,7 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  docker-image:
+  build-docker-image:
     docker:
       - image: docker:stable
     steps:
@@ -14,10 +14,16 @@ jobs:
       - run:
           name: "build docker image"
           command: "docker build . -t node-sample"
+      - run:
+          name: "run docker"
+          command: "docker run -d -p8080:8080 node-sample"
+      - run:
+          name: "test 8080 port"
+          command: 'curl -s -o /dev/null -w "%{http_code}" localhost:8080'
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   docker-image-workflow:
     jobs:
-      - docker-image
+      - build-docker-image
