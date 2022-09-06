@@ -55,6 +55,6 @@ workflows:
   docker-image-workflow:
     jobs:
       - build-docker-image
-      - publishLatestToHub:
+      - publish-latest:
           requires:
             - build-docker-image
